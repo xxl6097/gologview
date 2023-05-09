@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/websocket"
 	"gologview/assets"
 	_ "gologview/assets/tcptest"
-	"gologview/go/api"
+	"gologview/go/logview"
 	"gologview/go/util"
 	frpNet "gologview/go/util/net"
 	"net"
@@ -62,7 +62,7 @@ func loadfile() {
 	//user, passwd := "admin", "admin"
 	//subRouter.Use(frpNet.NewHTTPAuthMiddleware(user, passwd).Middleware)
 
-	serv := api.NewService()
+	serv := logview.NewService()
 
 	ws := util.NewWebSocket()
 
@@ -107,5 +107,5 @@ func loadhtml() {
 
 func main() {
 	//loadfile()
-	api.New().Start()
+	logview.New().Start()
 }

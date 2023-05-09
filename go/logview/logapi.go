@@ -1,4 +1,4 @@
-package api
+package logview
 
 import (
 	"github.com/gorilla/mux"
