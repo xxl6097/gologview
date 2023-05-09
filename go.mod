@@ -1,4 +1,4 @@
-module htmltest
+module gologview
 
 go 1.19
 
