@@ -35,6 +35,8 @@ func New() *LogApi {
 }
 
 func (this *LogApi) Start() {
+	user, passwd := "admin", "het002402"
+	this.subRouter.Use(frpNet.NewHTTPAuthMiddleware(user, passwd).Middleware)
 	// api, see admin_api.go
 	this.subRouter.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
 	this.subRouter.HandleFunc("/echo", this.wsapi.Echo).Methods("GET")
