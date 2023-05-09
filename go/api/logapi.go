@@ -2,9 +2,9 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	"htmltest/assets"
-	"htmltest/go/util"
-	frpNet "htmltest/go/util/net"
+	"gologview/assets"
+	"gologview/go/util"
+	frpNet "gologview/go/util/net"
 	"net"
 	"net/http"
 	"time"
