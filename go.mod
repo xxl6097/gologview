@@ -1,4 +1,4 @@
-module gologview
+module github.com/xxl6097/gologview
 
 go 1.19
 

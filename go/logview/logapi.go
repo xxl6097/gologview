@@ -2,9 +2,9 @@ package logview
 
 import (
 	"github.com/gorilla/mux"
-	"gologview/assets"
-	"gologview/go/util"
-	frpNet "gologview/go/util/net"
+	"github.com/xxl6097/gologview/assets"
+	"github.com/xxl6097/gologview/go/util"
+	frpNet "github.com/xxl6097/gologview/go/util/net"
 	"net"
 	"net/http"
 	"time"
