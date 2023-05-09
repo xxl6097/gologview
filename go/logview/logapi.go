@@ -3,6 +3,7 @@ package logview
 import (
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/gologview/assets"
+	_ "github.com/xxl6097/gologview/assets/tcptest"
 	"github.com/xxl6097/gologview/go/util"
 	frpNet "github.com/xxl6097/gologview/go/util/net"
 	"net"

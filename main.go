@@ -106,5 +106,6 @@ func loadhtml() {
 
 func main() {
 	//loadfile()
+
 	logview.New().Start()
 }

@@ -2,7 +2,7 @@ package tcptest
 
 import (
 	"embed"
-	"gologview/assets"
+	"github.com/xxl6097/gologview/assets"
 )
 
 //go:embed static/*
