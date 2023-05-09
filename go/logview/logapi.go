@@ -46,7 +46,7 @@ func (this *LogApi) Start() {
 		http.Redirect(w, r, "/static/", http.StatusMovedPermanently)
 	})
 
-	address := ":8081"
+	address := ":8080"
 	server := &http.Server{
 		Addr:         address,
 		Handler:      this.router,
