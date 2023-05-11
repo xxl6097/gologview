@@ -6,7 +6,6 @@ import (
 	"github.com/xxl6097/gologview/assets"
 	_ "github.com/xxl6097/gologview/assets/tcptest"
 	"github.com/xxl6097/gologview/go/util"
-	frpNet "github.com/xxl6097/gologview/go/util/net"
 	"net"
 	"net/http"
 	"time"
@@ -37,7 +36,7 @@ func New() *LogApi {
 
 func (this *LogApi) Start(port int) {
 	user, passwd := "admin", "het002402"
-	this.subRouter.Use(frpNet.NewHTTPAuthMiddleware(user, passwd).Middleware)
+	this.subRouter.Use(util.NewHTTPAuthMiddleware(user, passwd).Middleware)
 	// api, see admin_api.go
 	this.subRouter.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
 	this.subRouter.HandleFunc("/echo", this.wsapi.Echo).Methods("GET")
@@ -45,10 +44,10 @@ func (this *LogApi) Start(port int) {
 	//this.subRouter.Handle("/file", http.FileServer(http.Dir("."))).Methods("GET")
 	// view
 	this.subRouter.Handle("/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
-	this.subRouter.PathPrefix("/logview").Handler(frpNet.MakeHTTPGzipHandler(http.StripPrefix("/logview", http.FileServer(assets.FileSystem)))).Methods("GET")
-	this.subRouter.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/logview/", http.StatusMovedPermanently)
-	})
+	this.subRouter.PathPrefix("/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
+	//this.subRouter.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	//	http.Redirect(w, r, "/", http.StatusMovedPermanently)
+	//})
 
 	address := fmt.Sprintf(":%d", port)
 	server := &http.Server{

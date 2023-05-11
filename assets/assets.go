@@ -41,7 +41,7 @@ func Load(path string) {
 }
 
 func Register(fileSystem fs.FS) {
-	subFs, err := fs.Sub(fileSystem, "logview")
+	subFs, err := fs.Sub(fileSystem, ".")
 	if err == nil {
 		content = subFs
 	}
