@@ -1,6 +1,7 @@
 package logview
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/gologview/assets"
 	_ "github.com/xxl6097/gologview/assets/tcptest"
@@ -34,21 +35,22 @@ func New() *LogApi {
 	return api
 }
 
-func (this *LogApi) Start() {
+func (this *LogApi) Start(port int) {
 	user, passwd := "admin", "het002402"
 	this.subRouter.Use(frpNet.NewHTTPAuthMiddleware(user, passwd).Middleware)
 	// api, see admin_api.go
 	this.subRouter.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
 	this.subRouter.HandleFunc("/echo", this.wsapi.Echo).Methods("GET")
 
+	//this.subRouter.Handle("/file", http.FileServer(http.Dir("."))).Methods("GET")
 	// view
 	this.subRouter.Handle("/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
-	this.subRouter.PathPrefix("/static/").Handler(frpNet.MakeHTTPGzipHandler(http.StripPrefix("/static/", http.FileServer(assets.FileSystem)))).Methods("GET")
+	this.subRouter.PathPrefix("/logview").Handler(frpNet.MakeHTTPGzipHandler(http.StripPrefix("/logview", http.FileServer(assets.FileSystem)))).Methods("GET")
 	this.subRouter.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/static/", http.StatusMovedPermanently)
+		http.Redirect(w, r, "/logview/", http.StatusMovedPermanently)
 	})
 
-	address := ":8080"
+	address := fmt.Sprintf(":%d", port)
 	server := &http.Server{
 		Addr:         address,
 		Handler:      this.router,
@@ -60,6 +62,14 @@ func (this *LogApi) Start() {
 		return
 	}
 
+	//go func() {
+	//	for {
+	//		this.wsapi.SendAll([]byte("---------"))
+	//		time.Sleep(time.Second * 5)
+	//	}
+	//}()
+
+	fmt.Printf("please open http://localhost%s", server.Addr)
 	_ = server.Serve(ln)
 }
 

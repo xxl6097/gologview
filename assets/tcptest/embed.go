@@ -5,7 +5,7 @@ import (
 	"github.com/xxl6097/gologview/assets"
 )
 
-//go:embed static/*
+//go:embed logview/*
 var content embed.FS
 
 func init() {

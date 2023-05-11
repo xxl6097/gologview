@@ -50,9 +50,9 @@ func (this *WebSocketUtil) Echo(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (this *WebSocketUtil) Send(data []byte) {
-	//this.conn.WriteMessage(websocket.BinaryMessage, data)
-}
+//func (this *WebSocketUtil) Send(data []byte) {
+//	//this.conn.WriteMessage(websocket.BinaryMessage, data)
+//}
 
 func (this *WebSocketUtil) SendAll(data []byte) {
 	for _, v := range this.conns {
