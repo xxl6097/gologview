@@ -33,21 +33,26 @@ func New() *LogApi {
 	api.serv = NewService()
 	return api
 }
-
 func (this *LogApi) Start(port int) {
 	user, passwd := "admin", "het002402"
 	this.subRouter.Use(util.NewHTTPAuthMiddleware(user, passwd).Middleware)
 	// api, see admin_api.go
 	this.subRouter.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
+	this.subRouter.HandleFunc("/api/files", this.serv.ApiFiles).Methods("GET")
 	this.subRouter.HandleFunc("/echo", this.wsapi.Echo).Methods("GET")
 
 	//this.subRouter.Handle("/file", http.FileServer(http.Dir("."))).Methods("GET")
+	//this.subRouter.PathPrefix("/files/").HandlerFunc(StaticServer)
+	//this.subRouter.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
+
 	// view
 	this.subRouter.Handle("/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
 	this.subRouter.PathPrefix("/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
 	//this.subRouter.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 	//	http.Redirect(w, r, "/", http.StatusMovedPermanently)
 	//})
+
+	//this.router.Handle("/staticfile/", http.StripPrefix("/staticfile/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview/gologview.zip"))))
 
 	address := fmt.Sprintf(":%d", port)
 	server := &http.Server{

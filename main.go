@@ -26,6 +26,7 @@ func main() {
 	//router.PathPrefix("/js/").HandlerFunc(StaticServer)
 	////当前端访问路径前缀为 /static/css/ 时返回访问地址指向的css文件内容
 	//router.PathPrefix("/css/").HandlerFunc(StaticServer)
+	//router.Handle("/staticfile/", http.StripPrefix("/staticfile/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
 	//
 	//srv := &http.Server{
 	//	Handler:      router,
@@ -36,7 +37,8 @@ func main() {
 	//
 	//log.Fatal(srv.ListenAndServe())
 
-	//aa := http.Dir("../")
+	//https://cyjy-iot.chengyang.gov.cn/clink/gtbx/log/
+	//aa := http.Dir("../")//20230511111437
 	//fmt.Println(aa)
 	//
 	//dirs, err := os.ReadDir("./assets")
@@ -50,7 +52,26 @@ func main() {
 	//	}
 	//}
 
+	//static file handler.
+	//http.Handle("/staticfile/", http.StripPrefix("/staticfile/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview/"))))
+	////Listen on port 8080
+	//http.ListenAndServe(":9999", nil)
+
 	//this.subRouter.Handle("/file", http.FileServer()).Methods("GET")
+
+	//router := mux.NewRouter()
+	//address := fmt.Sprintf(":%d", 9999)
+	//server := &http.Server{
+	//	Addr:    address,
+	//	Handler: router,
+	//}
+	//router.Handle("/staticfile/", http.StripPrefix("/staticfile/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview/"))))
+	//ln, err := net.Listen("tcp", address)
+	//if err != nil {
+	//	return
+	//}
+	//fmt.Printf("please open http://localhost%s", server.Addr)
+	//_ = server.Serve(ln)
+
 	logview.New().Start(9999)
-	//http://127.0.0.1/clinkui
 }
