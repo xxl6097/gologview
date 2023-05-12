@@ -86,8 +86,8 @@ func (svr *GeneralResponse) ApiFiles(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println(w, "URL中的user请求参数的值是：", r.FormValue("path"))
 
-	fmt.Println(w, "你发送的请求地址是：", r.URL.Path)
-	fmt.Println(w, "你发送的请求地址后查询字符串是：", r.URL.RawQuery)
+	//fmt.Println(w, "你发送的请求地址是：", r.URL.Path)
+	//fmt.Println(w, "你发送的请求地址后查询字符串是：", r.URL.RawQuery)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*") //允许访问所有域
