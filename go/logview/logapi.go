@@ -61,8 +61,8 @@ func fileServer(w http.ResponseWriter, r *http.Request) {
 }
 
 func (this *LogApi) Start(port int) {
-	//user, passwd := "admin", "het002402"
-	//this.subRouter.Use(util.NewHTTPAuthMiddleware(user, passwd).Middleware)
+	user, passwd := "admin", "het002402"
+	this.subRouter.Use(util.NewHTTPAuthMiddleware(user, passwd).Middleware)
 	// api, see admin_api.go
 	this.subRouter.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
 	this.subRouter.HandleFunc("/api/files", this.serv.ApiFiles).Methods("GET")
