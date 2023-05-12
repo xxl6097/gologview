@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/xxl6097/gologview/go/logview"
+	"log"
 	"net/http"
+	"time"
 )
 
 //func loadhtml() {
@@ -13,31 +15,60 @@ import (
 //}
 
 func StaticServer(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "./assets/tcptest/logview/"+r.URL.Path)
+	//http.ServeFile(w, r, ".")
+	pp := r.FormValue("path")
+	http.ServeFile(w, r, pp)
 	//http.FileServer(assets.FileSystem)
+	//http.StripPrefix("/file/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))).ServeHTTP(w, r)
 }
-func main() {
-	//assets.Load("")
+
+func serveFile1() {
+	router := http.NewServeMux()
 	//router := mux.NewRouter()
-	////当前端访问：http://127.0.0.1:8000/ 地址时返回当前目录下的 index.html
-	//router.HandleFunc("/", StaticServer)
-	////当前端访问路径前缀为 /static/js/ 时返回访问地址指向的js文件内容
-	////当网页解析到 <script defer="defer" src="/static/js/main.c2c1cea9.js"></script> 时会执行
+	//router.Handle("/file/", http.StripPrefix("/file/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
+	router.HandleFunc("/files/", StaticServer)
+	//http.Handle("/file/", http.StripPrefix("/file/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
 	//router.PathPrefix("/js/").HandlerFunc(StaticServer)
 	////当前端访问路径前缀为 /static/css/ 时返回访问地址指向的css文件内容
 	//router.PathPrefix("/css/").HandlerFunc(StaticServer)
-	//router.Handle("/staticfile/", http.StripPrefix("/staticfile/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
-	//
-	//srv := &http.Server{
-	//	Handler:      router,
-	//	Addr:         ":9999",
-	//	WriteTimeout: 15 * time.Second,
-	//	ReadTimeout:  15 * time.Second,
+	//router.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
+
+	srv := &http.Server{
+		Handler:      router,
+		Addr:         ":8080",
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	log.Fatal(srv.ListenAndServe())
+}
+
+func serveFile() {
+	http.Handle("/file/", http.StripPrefix("/file/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
+	http.ListenAndServe(":8080", nil)
+}
+func main() {
+	//serveFile1()
+	//r := mux.NewRouter()
+	//r.PathPrefix("/files/").Handler(http.StripPrefix("/files/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
+	////log.Fatal(http.ListenAndServe(":8888", r))
+	//address := fmt.Sprintf(":%d", 8888)
+	//server := &http.Server{
+	//	Addr:    address,
+	//	Handler: r,
 	//}
-	//
-	//log.Fatal(srv.ListenAndServe())
+	//ln, err := net.Listen("tcp", address)
+	//if err != nil {
+	//	return
+	//}
+	//fmt.Printf("please open http://localhost%s", server.Addr)
+	//_ = server.Serve(ln)
+
+	//serveFile()
+	//http.Handle("/file/", http.StripPrefix("/file/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
 
 	//https://cyjy-iot.chengyang.gov.cn/clink/gtbx/log/
+	//wss://cyjy-iot.chengyang.gov.cn/clink/gtbx/echo
 	//aa := http.Dir("../")//20230511111437
 	//fmt.Println(aa)
 	//
@@ -73,5 +104,8 @@ func main() {
 	//fmt.Printf("please open http://localhost%s", server.Addr)
 	//_ = server.Serve(ln)
 
-	logview.New().Start(9999)
+	//aa := "/User/uuxia/a.txt/"
+	//bb := strings.HasSuffix(aa, "/")
+	//fmt.Println(bb)
+	logview.New().Start(8080)
 }

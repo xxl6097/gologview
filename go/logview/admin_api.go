@@ -100,24 +100,41 @@ func (svr *GeneralResponse) ApiFiles(w http.ResponseWriter, r *http.Request) {
 	// 可选，是否允许后续请求携带认证信息Cookir，该值只能是true，不需要则不设置
 	w.Header().Set("Access-Control-Allow-Credentials", "true")
 
-	dirs, err := os.ReadDir(r.FormValue("path"))
-	if err != nil {
-		return
-	}
+	filepath := r.FormValue("path")
+	isFile := strings.HasSuffix(filepath, "/")
 
-	files := []TreeData{}
-	for _, dir := range dirs {
-		f := TreeData{
-			Id:    dir.Name(),
-			Label: dir.Name(),
+	if !isFile {
+		w.Header().Set("File-Type", "text")
+		http.ServeFile(w, r, filepath) //r.URL.Path
+	} else {
+		dirs, err := os.ReadDir(filepath)
+		if err != nil {
+			return
 		}
-		files = append(files, f)
+
+		files := []TreeData{}
+		for _, dir := range dirs {
+			f := TreeData{
+				Id:    dir.Name(),
+				Label: dir.Name(),
+			}
+			if dir.IsDir() {
+				f.Label = dir.Name() + "/"
+			}
+			files = append(files, f)
+		}
+
+		defer func() {
+			buf, _ = json.Marshal(&files)
+			_, _ = w.Write(buf)
+		}()
 	}
 
-	defer func() {
-		buf, _ = json.Marshal(&files)
-		_, _ = w.Write(buf)
-	}()
+}
+
+// GET api/status
+func (svr *GeneralResponse) ApiDir(w http.ResponseWriter, r *http.Request) {
+	http.ServeFile(w, r, ".") //r.URL.Path
 }
 
 /**
