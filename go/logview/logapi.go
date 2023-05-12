@@ -17,16 +17,19 @@ var (
 )
 
 type LogApi struct {
-	wsapi     util.WebSocketUtil
-	serv      *GeneralResponse
-	router    *mux.Router
-	subRouter *mux.Router
+	wsapi              util.WebSocketUtil
+	serv               *GeneralResponse
+	router             *mux.Router
+	subRouter          *mux.Router
+	Username, Password string
 }
 
 func New() *LogApi {
 	assets.Load("")
 	api := &LogApi{
-		wsapi: util.NewWebSocket(),
+		wsapi:    util.NewWebSocket(),
+		Username: "admin",
+		Password: "het002402",
 	}
 	api.router = mux.NewRouter()
 	api.subRouter = api.router.NewRoute().Subrouter()
@@ -60,9 +63,15 @@ func fileServer(w http.ResponseWriter, r *http.Request) {
 	http.StripPrefix("/files/", http.FileServer(http.Dir("/"))).ServeHTTP(w, r)
 }
 
+func (this *LogApi) SetUser(username, password string) *LogApi {
+	this.Username = username
+	this.Password = password
+	return this
+}
+
 func (this *LogApi) Start(port int) {
-	user, passwd := "admin", "het002402"
-	this.subRouter.Use(util.NewHTTPAuthMiddleware(user, passwd).Middleware)
+	//user, passwd := "admin", "het002402"
+	this.subRouter.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
 	// api, see admin_api.go
 	this.subRouter.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
 	this.subRouter.HandleFunc("/api/files", this.serv.ApiFiles).Methods("GET")
