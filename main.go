@@ -103,7 +103,6 @@ func main() {
 	//}
 	//fmt.Printf("please open http://localhost%s", server.Addr)
 	//_ = server.Serve(ln)
-
 	//aa := "/User/uuxia/a.txt/"
 	//bb := strings.HasSuffix(aa, "/")
 	//fmt.Println(bb)
