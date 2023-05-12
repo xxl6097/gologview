@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/xxl6097/gologview/assets"
-	_ "github.com/xxl6097/gologview/assets/tcptest"
+	_ "github.com/xxl6097/gologview/assets/html"
 	"github.com/xxl6097/gologview/go/util"
 	"net"
 	"net/http"
