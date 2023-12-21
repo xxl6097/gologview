@@ -51,7 +51,7 @@ func serveFile() {
 }
 
 func init() {
-	go logview.GetLogApi().RunAndSetUserPass(8080, "admin", "admin")
+	logview.GetLogApi().RunAndSetUserPass(8080, "admin", "admin")
 }
 
 func main() {

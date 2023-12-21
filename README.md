@@ -12,7 +12,7 @@ go get -u github.com/xxl6097/gologview
 ```go
 
 func init() {
-	go logview.GetLogApi().RunAndSetUserPass(8080, "admin", "admin")
+	logview.GetLogApi().RunAndSetUserPass(8080, "admin", "admin")
 }
 
 func main() {

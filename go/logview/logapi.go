@@ -94,10 +94,14 @@ func (this *LogApi) setUserPass(username, password string) *LogApi {
 
 func (this *LogApi) RunAndSetUserPass(port int, username, password string) {
 	this.setUserPass(username, password)
-	this.Run(port)
+	go this.start(port)
 }
 
 func (this *LogApi) Run(port int) {
+	this.RunAndSetUserPass(port, "admin", "admin")
+}
+
+func (this *LogApi) start(port int) {
 	//user, passwd := "admin", "het002402"
 	//this.subRouter.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
 	// api, see admin_api.go
