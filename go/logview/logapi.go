@@ -8,6 +8,7 @@ import (
 	"github.com/xxl6097/gologview/go/util"
 	"net"
 	"net/http"
+	"sync"
 	"time"
 )
 
@@ -24,7 +25,23 @@ type LogApi struct {
 	Username, Password string
 }
 
-func New() *LogApi {
+var lock = &sync.Mutex{}
+var instance *LogApi
+
+func GetLogApi() *LogApi {
+	if instance == nil {
+		lock.Lock()
+		defer lock.Unlock()
+		if instance == nil {
+			instance = new()
+		} else {
+		}
+	} else {
+	}
+	return instance
+}
+
+func new() *LogApi {
 	assets.Load("")
 	api := &LogApi{
 		wsapi:    util.NewWebSocket(),
@@ -105,7 +122,7 @@ func (this *LogApi) Start(port int) {
 	//	}
 	//}()
 
-	fmt.Printf("please open http://localhost%s", server.Addr)
+	fmt.Printf("logview webside http://localhost%s\n", server.Addr)
 	_ = server.Serve(ln)
 }
 

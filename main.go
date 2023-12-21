@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"github.com/xxl6097/go-glog/glog"
 	"github.com/xxl6097/gologview/go/logview"
 	"log"
 	"net/http"
@@ -47,6 +49,19 @@ func serveFile() {
 	http.Handle("/file/", http.StripPrefix("/file/", http.FileServer(http.Dir("/Users/uuxia/Desktop/work/code/go/gologview"))))
 	http.ListenAndServe(":8080", nil)
 }
+
+func onLogHook(log []byte) {
+	logview.GetLogApi().Send(log)
+}
+
+func init() {
+	glog.Hook(onLogHook)
+	logview.GetLogApi().SetUser("admin", "admin")
+	go func() {
+		logview.GetLogApi().Start(8080)
+	}()
+}
+
 func main() {
 	//serveFile1()
 	//r := mux.NewRouter()
@@ -106,5 +121,9 @@ func main() {
 	//aa := "/User/uuxia/a.txt/"
 	//bb := strings.HasSuffix(aa, "/")
 	//fmt.Println(bb)
-	logview.New().Start(8080)
+	for {
+		fmt.Println("aaaaaa")
+		glog.Info("info...")
+		time.Sleep(time.Second)
+	}
 }
