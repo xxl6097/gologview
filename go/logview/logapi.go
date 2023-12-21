@@ -3,6 +3,7 @@ package logview
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/xxl6097/go-glog/glog"
 	"github.com/xxl6097/gologview/assets"
 	_ "github.com/xxl6097/gologview/assets/html"
 	"github.com/xxl6097/gologview/go/util"
@@ -46,7 +47,7 @@ func new() *LogApi {
 	api := &LogApi{
 		wsapi:    util.NewWebSocket(),
 		Username: "admin",
-		Password: "het002402",
+		Password: "admin",
 	}
 	api.router = mux.NewRouter()
 	api.subRouter = api.router.NewRoute().Subrouter()
@@ -74,19 +75,29 @@ func new() *LogApi {
 
 	api.router.Use(mux.CORSMethodMiddleware(api.router))
 	api.serv = NewService()
+	glog.Hook(api.hook)
 	return api
 }
 func fileServer(w http.ResponseWriter, r *http.Request) {
 	http.StripPrefix("/files/", http.FileServer(http.Dir("/"))).ServeHTTP(w, r)
 }
 
-func (this *LogApi) SetUser(username, password string) *LogApi {
+func (this *LogApi) hook(log []byte) {
+	this.Send(log)
+}
+
+func (this *LogApi) setUserPass(username, password string) *LogApi {
 	this.Username = username
 	this.Password = password
 	return this
 }
 
-func (this *LogApi) Start(port int) {
+func (this *LogApi) RunAndSetUserPass(port int, username, password string) {
+	this.setUserPass(username, password)
+	this.Run(port)
+}
+
+func (this *LogApi) Run(port int) {
 	//user, passwd := "admin", "het002402"
 	//this.subRouter.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
 	// api, see admin_api.go

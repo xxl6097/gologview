@@ -9,22 +9,16 @@ go get -u github.com/xxl6097/gologview
 ```
 ## 使用步骤
 
-```shell
-func onLogHook(log []byte) {
-	logview.GetLogApi().Send(log)
-}
+```go
 
 func init() {
-	glog.Hook(onLogHook)
-	logview.GetLogApi().SetUser("admin", "admin")
-	go func() {
-		logview.GetLogApi().Start(8080)
-	}()
+	go logview.GetLogApi().RunAndSetUserPass(8080, "admin", "admin")
 }
 
 func main() {
   for {
-		fmt.Println("aaaaaa")
+		fmt.Println("aaaaaa这个不会在web上显示哦")
+		glog.Info("info...")
 		time.Sleep(time.Second)
 	}
 }

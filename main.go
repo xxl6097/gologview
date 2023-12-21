@@ -50,16 +50,8 @@ func serveFile() {
 	http.ListenAndServe(":8080", nil)
 }
 
-func onLogHook(log []byte) {
-	logview.GetLogApi().Send(log)
-}
-
 func init() {
-	glog.Hook(onLogHook)
-	logview.GetLogApi().SetUser("admin", "admin")
-	go func() {
-		logview.GetLogApi().Start(8080)
-	}()
+	go logview.GetLogApi().RunAndSetUserPass(8080, "admin", "admin")
 }
 
 func main() {
@@ -122,7 +114,7 @@ func main() {
 	//bb := strings.HasSuffix(aa, "/")
 	//fmt.Println(bb)
 	for {
-		fmt.Println("aaaaaa")
+		fmt.Println("aaaaaa这个不会在web上显示哦")
 		glog.Info("info...")
 		time.Sleep(time.Second)
 	}
