@@ -51,7 +51,7 @@ func New() *LogApi {
 	// 服务器支持的所有头信息字段，不限于浏览器在"预检"中请求的字段
 	api.subRouter.Headers("Access-Control-Allow-Headers", "*")
 	// 可选，设置XMLHttpRequest的响应对象能拿到的额外字段
-	api.subRouter.Headers("Access-Control-Expose-Headers", "Access-Control-Allow-Headers, Token")
+	api.subRouter.Headers("Access-Control-Expose-Headeapirs", "Access-Control-Allow-Headers, Token")
 	// 可选，是否允许后续请求携带认证信息Cookir，该值只能是true，不需要则不设置
 	api.subRouter.Headers("Access-Control-Allow-Credentials", "true")
 
@@ -71,7 +71,7 @@ func (this *LogApi) SetUser(username, password string) *LogApi {
 
 func (this *LogApi) Start(port int) {
 	//user, passwd := "admin", "het002402"
-	this.subRouter.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
+	//this.subRouter.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
 	// api, see admin_api.go
 	this.subRouter.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
 	this.subRouter.HandleFunc("/api/files", this.serv.ApiFiles).Methods("GET")
