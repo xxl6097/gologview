@@ -12,7 +12,7 @@ go get -u github.com/xxl6097/gologview
 ```shell
 
 func main() {
-	logview.New().Start(8080)
+  logview.New().Start(8080)
 }
 
 ```
