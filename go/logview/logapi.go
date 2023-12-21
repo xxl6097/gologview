@@ -137,7 +137,7 @@ func (this *LogApi) start(port int) {
 	//	}
 	//}()
 
-	fmt.Printf("logview webside http://localhost%s\n", server.Addr)
+	glog.Errorf("logview webside http://localhost%s\n", server.Addr)
 	_ = server.Serve(ln)
 }
 
