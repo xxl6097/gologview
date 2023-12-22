@@ -16,6 +16,7 @@ import (
 var (
 	httpServerReadTimeout  = 60 * time.Second
 	httpServerWriteTimeout = 60 * time.Second
+	pifix                  = "/logview"
 )
 var lock = &sync.Mutex{}
 var instance *LogApi
@@ -71,13 +72,13 @@ func (this *LogApi) HandlerLogView(router *mux.Router) {
 	this.serv = NewService()
 
 	router.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
-	router.HandleFunc("/api/status", this.serv.ApiStatus).Methods("GET")
-	router.HandleFunc("/api/files", this.serv.ApiFiles).Methods("GET")
+	router.HandleFunc(pifix+"/api/status", this.serv.ApiStatus).Methods("GET")
+	router.HandleFunc(pifix+"/api/files", this.serv.ApiFiles).Methods("GET")
 	router.HandleFunc("/echo", this.wsapi.Echo).Methods("GET")
-	router.PathPrefix("/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
+	router.PathPrefix(pifix + "/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
 	// view
-	router.Handle("/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
-	router.PathPrefix("/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
+	router.Handle(pifix+"/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
+	router.PathPrefix(pifix + "/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
 }
 
 func (this *LogApi) start(port int) {
@@ -99,6 +100,7 @@ func (this *LogApi) start(port int) {
 		return
 	}
 
-	glog.Errorf("logv webside http://%s\n", server.Addr)
+	ip := util.GetHostIp()
+	glog.Errorf("logv webside http://%s%s/logview/\n", ip, server.Addr)
 	_ = server.Serve(ln)
 }
