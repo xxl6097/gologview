@@ -1,4 +1,4 @@
-package logview
+package glogweb
 
 import (
 	"encoding/json"
@@ -13,7 +13,6 @@ type GeneralResponse struct {
 	Code int
 	Msg  string
 }
-
 type TreeData struct {
 	Id       string `json:"id"`
 	Label    string `json:"label"`
@@ -22,13 +21,6 @@ type TreeData struct {
 		Label string `json:"label"`
 	} `json:"children,omitempty"`
 }
-
-func NewService() (svr *GeneralResponse) {
-	svr = &GeneralResponse{}
-
-	return svr
-}
-
 type ProxyStatusResp struct {
 	Name       string `json:"name"`
 	Type       string `json:"type"`
@@ -40,6 +32,10 @@ type ProxyStatusResp struct {
 }
 type StatusResp map[string][]ProxyStatusResp
 
+func NewService() (svr *GeneralResponse) {
+	svr = &GeneralResponse{}
+	return svr
+}
 func (svr *GeneralResponse) setAllows(w http.ResponseWriter) {
 	w.Header().Set("Access-Control-Allow-Origin", "*") //允许访问所有域
 	// 必须，设置服务器支持的所有跨域请求的方法
@@ -64,11 +60,6 @@ func (svr *GeneralResponse) ApiStatus(w http.ResponseWriter, r *http.Request) {
 		buf, _ = json.Marshal(&res)
 		_, _ = w.Write(buf)
 	}()
-
-	//ps := svr.ctl.pm.GetAllProxyStatus()
-	//for _, status := range ps {
-	//	res[status.Type] = append(res[status.Type], NewProxyStatusResp(status, svr.cfg.ServerAddr))
-	//}
 
 	a := ProxyStatusResp{
 		Name:       "clife.pi.M2-5900:6200",
@@ -135,47 +126,3 @@ func (svr *GeneralResponse) ApiFiles(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-
-// GET api/status
-func (svr *GeneralResponse) ApiDir(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, ".") //r.URL.Path
-}
-
-/**
-[
-    {
-        "id": "node-1",
-        "label": "node-1",
-        "children": [
-            {
-                "id": "node-1-1",
-                "label": "node-1-1"
-            }
-        ]
-    },
-    {
-        "id": "node-2",
-        "label": "node-2",
-        "children": [
-            {
-                "id": "node-2-1",
-                "label": "node-2-1"
-            }
-        ]
-    },
-    {
-        "id": "node-3",
-        "label": "node-3",
-        "children": [
-            {
-                "id": "node-3-1",
-                "label": "node-3-1"
-            },
-            {
-                "id": "node-3-2",
-                "label": "node-3-2"
-            }
-        ]
-    }
-]
-*/
