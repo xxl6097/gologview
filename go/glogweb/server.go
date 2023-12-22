@@ -74,7 +74,7 @@ func (this *LogApi) HandlerLogView(router *mux.Router) {
 	router.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
 	router.HandleFunc(pifix+"/api/status", this.serv.ApiStatus).Methods("GET")
 	router.HandleFunc(pifix+"/api/files", this.serv.ApiFiles).Methods("GET")
-	router.HandleFunc("/echo", this.wsapi.Echo).Methods("GET")
+	router.HandleFunc(pifix+"/echo", this.wsapi.Echo).Methods("GET")
 	router.PathPrefix(pifix + "/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
 	// view
 	router.Handle(pifix+"/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
