@@ -68,7 +68,13 @@ func (this *LogApi) RunAndSetUserPass(port int, username, password string) {
 	go this.start(port)
 }
 
-func (this *LogApi) HandlerLogView(router *mux.Router) {
+func (this *LogApi) HandlerLogView(router *mux.Router, username, password string) {
+	this.Username = username
+	this.Password = password
+	this.handlelog(router)
+}
+
+func (this *LogApi) handlelog(router *mux.Router) {
 	this.serv = NewService()
 
 	router.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
@@ -85,7 +91,7 @@ func (this *LogApi) start(port int) {
 	this.router = mux.NewRouter()
 	this.subRouter = this.router.NewRoute().Subrouter()
 
-	this.HandlerLogView(this.subRouter)
+	this.handlelog(this.subRouter)
 
 	address := fmt.Sprintf(":%d", port)
 	server := &http.Server{
