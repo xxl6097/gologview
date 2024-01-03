@@ -1,7 +1,12 @@
-# ts-logview
+# vue-weblog
 
 ## Project setup
 ```
+
+vue create hello-world
+
+yarn add element-plus
+
 yarn install
 ```
 

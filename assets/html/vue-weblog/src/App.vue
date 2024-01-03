@@ -1,17 +1,17 @@
 <template>
-  <div>
-    <LogView></LogView>
-  </div>
+    <div>
+        <LogView></LogView>
+    </div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import LogView from "@/views/LogView.vue"; // @ is an alias to /src
+import LogView from "@/views/HomeView.vue"; // @ is an alias to /src
 
 export default defineComponent({
-  name: "HomeView",
-  components: {
-    LogView,
-  },
+    name: "HomeView",
+    components: {
+        LogView,
+    },
 });
 </script>
 

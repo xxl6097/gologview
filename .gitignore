@@ -1,4 +1,7 @@
 .gradle
+.DS_Store
+node_modules
+/dist
 /local.properties
 /.idea
 .DS_Store
