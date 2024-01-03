@@ -82,7 +82,7 @@ func (this *LogApi) handlelog(router *mux.Router) {
 	router.HandleFunc(pifix+"/api/files", this.serv.ApiFiles).Methods("GET")
 	router.HandleFunc(pifix+"/echo", this.wsapi.Echo).Methods("GET")
 	//router.PathPrefix(pifix + "/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
-	router.PathPrefix("/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("./"))))
+	router.PathPrefix("/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
 	// view
 	router.Handle(pifix+"/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
 	router.PathPrefix(pifix + "/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
