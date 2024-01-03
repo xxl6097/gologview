@@ -14,7 +14,7 @@ build
 fyne-cross
 .idea
 cmake-build-debug
-
+node_modules
 # Built application files
 *.apk
 *.ap_
