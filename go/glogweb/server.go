@@ -81,7 +81,8 @@ func (this *LogApi) handlelog(router *mux.Router) {
 	router.HandleFunc(pifix+"/api/status", this.serv.ApiStatus).Methods("GET")
 	router.HandleFunc(pifix+"/api/files", this.serv.ApiFiles).Methods("GET")
 	router.HandleFunc(pifix+"/echo", this.wsapi.Echo).Methods("GET")
-	router.PathPrefix(pifix + "/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
+	//router.PathPrefix(pifix + "/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
+	router.PathPrefix("/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
 	// view
 	router.Handle(pifix+"/favicon.ico", http.FileServer(assets.FileSystem)).Methods("GET")
 	router.PathPrefix(pifix + "/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
@@ -108,5 +109,26 @@ func (this *LogApi) start(port int) {
 
 	ip := util.GetHostIp()
 	glog.Errorf("logv webside http://%s%s/logview/\n", ip, server.Addr)
+	_ = server.Serve(ln)
+}
+
+func TestFileServer() {
+	router := mux.NewRouter()
+	router.NewRoute().Subrouter().PathPrefix("/fserver/").Handler(http.StripPrefix("/fserver/", http.FileServer(http.Dir("/"))))
+	//router.PathPrefix("/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
+
+	address := fmt.Sprintf(":%d", 8080)
+	server := &http.Server{
+		Addr:         address,
+		Handler:      router,
+		ReadTimeout:  httpServerReadTimeout,
+		WriteTimeout: httpServerWriteTimeout,
+	}
+	ln, err := net.Listen("tcp", address)
+	if err != nil {
+		return
+	}
+	fmt.Printf("please open http://localhost%s\n", server.Addr)
+	fmt.Printf("please open http://localhost%s/fserver/\n", server.Addr)
 	_ = server.Serve(ln)
 }
