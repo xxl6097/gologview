@@ -21,6 +21,7 @@ FROM alpine AS runner
 WORKDIR /app
 COPY --from=builder /app/main .
 #COPY --from=builder /app/conf ./conf
+ENV ENV_TYPE=release
 RUN mkdir /logs
 RUN echo "https://mirrors.aliyun.com/alpine/v3.8/main/" > /etc/apk/repositories \
     && echo "https://mirrors.aliyun.com/alpine/v3.8/community/" >> /etc/apk/repositories \

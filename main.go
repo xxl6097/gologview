@@ -7,11 +7,16 @@ import (
 	"github.com/xxl6097/gologview/go/glogweb"
 	"net"
 	"net/http"
+	"os"
 	"time"
 )
 
 func init() {
-	glogweb.GetLogApi().RunAndSetUserPass(8086, "admin", "admin")
+	glogweb.GetLogApi().RunAndSetUserPass(8086, "admin", "admin", func(router *mux.Router) {
+		router.HandleFunc("/test", func(writer http.ResponseWriter, request *http.Request) {
+			_, _ = writer.Write([]byte("hello glogweb"))
+		})
+	})
 }
 
 func TestFileServer() {
@@ -33,6 +38,7 @@ func TestFileServer() {
 }
 
 func main() {
+	fmt.Println("=======>" + os.Getenv("ENV_TYPE"))
 	for {
 		fmt.Println("aaaaaa这个不会在web上显示哦")
 		glog.Info("info...")
