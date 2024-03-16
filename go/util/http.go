@@ -124,7 +124,7 @@ func GetHostIp() string {
 	}
 	var ip string
 	for _, address := range addrList {
-		if ipNet, ok := address.(*net.IPNet); ok && !ipNet.IP.IsLoopback() {
+		if ipNet, ok := address.(*net.IPNet); ok && !ipNet.IP.IsLoopback() && ipNet.IP.IsPrivate() {
 			if ipNet.IP.To4() != nil {
 				ip = ipNet.IP.String()
 				break
@@ -132,4 +132,15 @@ func GetHostIp() string {
 		}
 	}
 	return ip
+}
+
+func GetUseIp() string {
+	dial, err := net.Dial("udp", "8.8.8.8:80") // Google的公共DNS服务器
+	if err != nil {
+		return "127.0.0.1"
+	}
+	addr := dial.LocalAddr().String()
+
+	index := strings.LastIndex(addr, ":")
+	return addr[:index]
 }
