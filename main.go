@@ -40,8 +40,11 @@ func TestFileServer() {
 func main() {
 	fmt.Println("=======>" + os.Getenv("ENV_TYPE"))
 	for {
-		fmt.Println("aaaaaa这个不会在web上显示哦")
+		fmt.Println("aaaaaa这个不会在web上显示哦~")
 		glog.Info("info...")
 		time.Sleep(time.Second * 5)
 	}
 }
+
+//git config --global user.email "cp@example.com"
+//git config --global user.name "cp"
