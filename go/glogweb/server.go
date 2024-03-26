@@ -63,7 +63,7 @@ func (this *LogApi) setUserPass(username, password string) *LogApi {
 	this.Password = password
 	return this
 }
-func (this *LogApi) RunAndSetUserPass(port int, username, password string, fun func(*mux.Router)) {
+func (this *LogApi) RunAndSetUserPass(port int, username, password string, fun func(router, subrouter *mux.Router)) {
 	this.setUserPass(username, password)
 	go this.start(port, fun)
 }
@@ -74,12 +74,12 @@ func (this *LogApi) HandlerLogView(router *mux.Router, username, password string
 	this.handlelog(router, nil)
 }
 
-func (this *LogApi) handlelog(router *mux.Router, fun func(*mux.Router)) {
+func (this *LogApi) handlelog(router *mux.Router, fun func(router, subrouter *mux.Router)) {
 	this.serv = NewService()
 
 	router.Use(util.NewHTTPAuthMiddleware(this.Username, this.Password).Middleware)
 	if fun != nil {
-		fun(router)
+		fun(this.router, router)
 	}
 	router.HandleFunc(pifix+"/api/status", this.serv.ApiStatus).Methods("GET")
 	router.HandleFunc(pifix+"/api/files", this.serv.ApiFiles).Methods("GET")
@@ -91,7 +91,7 @@ func (this *LogApi) handlelog(router *mux.Router, fun func(*mux.Router)) {
 	router.PathPrefix(pifix + "/").Handler(util.MakeHTTPGzipHandler(http.StripPrefix("/", http.FileServer(assets.FileSystem)))).Methods("GET")
 }
 
-func (this *LogApi) start(port int, fun func(*mux.Router)) {
+func (this *LogApi) start(port int, fun func(router, subrouter *mux.Router)) {
 	this.router = mux.NewRouter()
 	this.subRouter = this.router.NewRoute().Subrouter()
 
