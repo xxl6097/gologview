@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	glogweb.GetLogApi().RunAndSetUserPass(8086, "admin", "admin", func(router *mux.Router) {
+	glogweb.GetLogApi().RunAndSetUserPass(8086, "admin", "admin", func(main, router *mux.Router) {
 		router.HandleFunc("/test", func(writer http.ResponseWriter, request *http.Request) {
 			_, _ = writer.Write([]byte("hello glogweb"))
 		})
